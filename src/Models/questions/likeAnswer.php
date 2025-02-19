@@ -24,7 +24,7 @@ function likeAnswer($answer_id) {
             $addLike->execute([$answer_id, $user_id]);
         }
 
-        return "Success";
+        return "200";
     }
 }
 ?>

@@ -57,13 +57,13 @@ function getUserProfile($id){
                     exit();
                 }
             } else {
-                echo "Vous devez être connecté pour suivre un utilisateur.";
+                return "400";
             }
         }
         return $userData;
 
     } else {
-        $errorMsg = "Aucun utilisateur trouvé";
+        return "404";
     }
 
 }

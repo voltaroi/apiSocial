@@ -6,12 +6,12 @@ function getMyQuestion($userId) {
     global $db;
 
     if (!$userId || $userId <= 0) {
-        return ['error' => 'ID utilisateur invalide'];
+        return "400";
     }
 
     $query = $db->prepare('SELECT id, title, description FROM questions WHERE id_author = ? ORDER BY id DESC');
     $query->execute([$userId]);
     $questions = $query->fetchAll(PDO::FETCH_ASSOC);
 
-    return $questions ?: ['error' => 'Aucune question trouvée'];
+    return $questions ?: "404";
 }

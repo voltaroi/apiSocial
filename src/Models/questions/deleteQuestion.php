@@ -21,12 +21,12 @@ function deleteQuestion($id){
             $deleteThisQuestion = $db->prepare('DELETE FROM questions WHERE id = ?');
             $deleteThisQuestion->execute([$idOfTheQuestion]);
 
-            return "Success";
+            return "200";
 
         }else{
-            echo"Vous n'avez pas les autorisation";
+            echo"404";
         }
     }else{
-        echo"Aucune question trouver";
+        echo"404";
     }
 }

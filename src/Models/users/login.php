@@ -34,11 +34,11 @@ function login($pseudo, $password){
             return $jwt;
 
         } else {
-            $errorMsg = "Mot de passe incorrect";
+            return "400";
         }
 
     } else {
-        $errorMsg = "Pseudo incorrect";
+        return "400";
     }
 }
 

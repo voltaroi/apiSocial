@@ -31,9 +31,9 @@ function publishQuestion($title, $description, $content){
             )
         );
 
-        return "Success";
+        return "200";
 
     }else{
-        return "title or description or content is not valid !";
+        return "400";
     }
 }

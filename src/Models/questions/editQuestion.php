@@ -14,10 +14,10 @@ function editQuestion($title, $description, $content, $idOfQuestion){
         $editQuestionOnWebsite = $db->prepare('UPDATE questions SET title = ?, description = ?, content = ? WHERE id = ?');
         $editQuestionOnWebsite->execute(array($new_question_title, $new_question_description, $new_question_content, $idOfQuestion));        
 
-        return "Success";
+        return "200";
 
     }else{
-        $errorMsg = "Veuillez compléter tous les champs...";
+        return "400";
     }
 
 }

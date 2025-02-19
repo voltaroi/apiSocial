@@ -1,0 +1,1065 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "description": "Social Network API",
+        "version": "1.0.0",
+        "title": "API Social"
+    },
+    "servers": [
+        {
+            "url": "http://90.107.81.168/apiSocial"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Users",
+            "description": "Everything related to users"
+        },
+        {
+            "name": "Questions",
+            "description": "Everything related to questions"
+        }
+    ],
+    "paths": {
+        "getUserProfile": {
+                "get": {
+                    "tags": [
+                        "Users"
+                    ],
+                    "summary": "Get user profile",
+                    "operationId": "getUser",
+                    "parameters": [
+                        {
+                            "name": "action",
+                            "in": "query",
+                            "required": true,
+                            "schema": {
+                                "type": "string",
+                                "enum": ["getUserProfile"]
+                            },
+                            "description": "Specific action, must be 'getUserProfile'"
+                        },
+                        {
+                            "name": "id",
+                            "in": "query",
+                            "required": true,
+                            "schema": {
+                                "type": "integer"
+                            },
+                            "description": "ID of the user to retrieve"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Return user information with their questions",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "user": {
+                                                "$ref": "#/components/schemas/Users"
+                                            },
+                                            "questions": {
+                                                "$ref": "#/components/schemas/ArrayOfQuestions"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        "editProfile": {
+                "post": {
+                    "tags": [
+                        "Users"
+                    ],
+                    "summary": "Edit user profile",
+                    "operationId": "editUser",
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "multipart/form-data": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "image": {
+                                            "type": "string",
+                                            "format": "binary",
+                                            "description": "Profile picture to upload"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Profile photo updated successfully",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "message": {
+                                                "type": "string",
+                                                "example": "Profile photo updated successfully"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        "login": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User login",
+                "operationId": "loginUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "pseudo": {
+                                        "type": "string",
+                                        "description": "User's pseudo"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "description": "User's password"
+                                    }
+                                },
+                                "required": ["pseudo", "password"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login successful"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "description": "JWT token for authentication"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid username or password"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "register": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User registration",
+                "operationId": "registerUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "pseudo": {
+                                        "type": "string",
+                                        "description": "User's pseudo"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "description": "User's password"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "Profile picture (optional)"
+                                    }
+                                },
+                                "required": ["pseudo", "password"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User registered successfully"
+                                        },
+                                        "userId": {
+                                            "type": "integer",
+                                            "description": "ID of the newly created user"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input or missing fields",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid input or missing fields"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "logout": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User logout",
+                "operationId": "logoutUser",
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User logged out successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "deleteQuestion": {
+            "delete": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Delete a question",
+                "operationId": "deleteQuestion",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the question to delete"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Question deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Question deleted successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Question not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Question not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "editQuestion": {
+            "put": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Edit a question",
+                "operationId": "editQuestion",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the question to edit"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "description": "Updated title of the question"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "description": "Updated description of the question"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "description": "Updated content of the question"
+                                    }
+                                },
+                                "required": ["title", "description", "content"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Question updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Question updated successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input or missing fields",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid input or missing fields"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Question not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Question not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "getAllAnswersOfQuestion": {
+            "get": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Get all answers of a question",
+                "operationId": "getAllAnswersOfQuestion",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the question to retrieve answers for"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of all answers for a specific question",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ArrayOfAnswers"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No answers found for the question",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No answers found for the question"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "getAllQuestions": {
+            "get": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Get all questions",
+                "operationId": "getAllQuestions",
+                "responses": {
+                    "200": {
+                        "description": "List of all questions",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ArrayOfQuestions"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No questions found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No questions found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "getInfoOfEditedQuestion": {
+            "get": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Get detailed information of an edited question",
+                "operationId": "getInfoOfEditedQuestion",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the question to retrieve"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detailed information of the edited question",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/QuestionContent"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input or missing question ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid input: missing or incorrect ID"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Question not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Question not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "getMyQuestion": {
+            "get": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Get all questions posted by a specific user",
+                "operationId": "getMyQuestion",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "User ID to retrieve their questions"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of all questions posted by the user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ArrayOfQuestions"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input or missing user ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid input: missing or incorrect ID"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No questions found for this user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No questions found for the given user ID"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "getQuestionContent": {
+            "get": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Get detailed content of a question",
+                "operationId": "getQuestionContent",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the question to retrieve content"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detailed content of the question",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/QuestionContent"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input or missing question ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid input: missing or incorrect ID"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Question not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Question not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "likeAnswer": {
+            "post": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Like an answer",
+                "operationId": "likeAnswer",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the answer to like"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Answer liked successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Answer liked successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input or missing answer ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid input: missing or incorrect ID"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Answer not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Answer not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "publishAnswer": {
+            "post": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Publish an answer to a question",
+                "operationId": "publishAnswer",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "description": "ID of the question being answered"
+                                    },
+                                    "pseudo": {
+                                        "type": "string",
+                                        "description": "Username of the person answering"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "description": "The content of the answer"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "pseudo",
+                                    "content"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Answer published successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Answer published successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input or missing required fields",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid input: missing or incorrect fields"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Question not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Question not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "publishQuestion": {
+            "post": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Publish a new question",
+                "operationId": "publishQuestion",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "description": "ID of the user publishing the question"
+                                    },
+                                    "pseudo": {
+                                        "type": "string",
+                                        "description": "Username of the person publishing the question"
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "description": "Title of the question"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "description": "Short description of the question"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "description": "Full content of the question"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "pseudo",
+                                    "title",
+                                    "description",
+                                    "content"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Question published successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Question published successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input or missing required fields",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid input: missing or incorrect fields"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Users": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "pseudo": {
+                        "type": "string"
+                    },
+                    "pp": {
+                        "type": "string"
+                    }
+                },
+                "example": [
+                    {
+                        "id": 2,
+                        "pseudo": "Heldo",
+                        "pp": "/uploads/profile_pics/default.png"
+                    }
+                ]
+            },
+            "Question": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ArrayOfQuestions":{
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/Question"
+                },
+                "example": [
+                    {
+                        "id": 1,
+                        "title": "Problème avec mon cactus",
+                        "description": "help me je comprend pas mon cactus"
+
+                    },
+                    {
+                        "id": 4,
+                        "title": "je ne comprend pas mon écureuil",
+                        "description": "il mange ma télévision"
+
+                    }
+                ]
+            },
+            "QuestionContent":{
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Answer": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "pseudo": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ArrayOfAnswers":{
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/Answer"
+                },
+                "example": [
+                    {
+                        "id": 2,
+                        "pseudo": "Harold",
+                        "content": "tu pourrais faire...."
+
+                    },
+                    {
+                        "id": 16,
+                        "pseudo": "Berne",
+                        "content": "je pense que tu devrais....."
+
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -27,11 +27,13 @@ function getInfoOfEditedQuestion($id){
             $question_description = str_replace('<br />', '', $question_description);
             $question_content = str_replace('<br />', '', $question_content);
 
+            return $question_content;
+
         }else{
-            $errorMsg = "Vous n'avez pas les autorisation";
+            return "404";
         }
 
     }else{
-        $errorMsg = "Aucune question n'as été trouver";
+        return "404";
     }
 }

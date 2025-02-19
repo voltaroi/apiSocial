@@ -6,7 +6,7 @@ function getQuestionContentById($id) {
     global $db;
 
     if (!$id || $id <= 0) {
-        return ['error' => "ID invalide"];
+        return "400";
     }
 
     $query = $db->prepare('SELECT * FROM questions WHERE id = ?');
@@ -15,6 +15,6 @@ function getQuestionContentById($id) {
     if ($query->rowCount() > 0) {
         return $query->fetch();
     } else {
-        return ['error' => "Aucune question n'a été trouvée"];
+        return "404";
     }
 }

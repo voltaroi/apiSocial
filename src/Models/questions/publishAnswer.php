@@ -14,4 +14,5 @@ function publishAnswer($question, $reponse) {
     $insertAnswer = $db->prepare('INSERT INTO answers(id_author, pseudo_author, id_question, content)VALUE(?, ?, ?, ?)');
     $insertAnswer->execute(array($_SESSION['id'], $_SESSION['pseudo'], $question, $user_answer));
 
+    return "200";
 }

@@ -46,9 +46,9 @@ function register($pseudo, $password) {
 
             return $jwt;
         } else {
-            return "Erreur lors de l'insertion de l'utilisateur";
+            return "404";
         }
     } else {
-        return "L'utilisateur existe déjà";
+        return "400";
     }
 }
