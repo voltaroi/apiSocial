@@ -5,11 +5,6 @@
         "version": "1.0.0",
         "title": "API Social"
     },
-    "servers": [
-        {
-            "url": "http://90.107.81.168/apiSocial"
-        }
-    ],
     "tags": [
         {
             "name": "Users",

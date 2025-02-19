@@ -10,6 +10,11 @@ Features:
     -Posts and comments
     -Secure API endpoints
 
+Installation:
+
+    -make the command: composer install
+    -You can directly import the database with the "forum.sql" file
+
 API Documentation:
 
     -For detailed information about API requests and responses, please refer to Swagger.html located in the project directory.
