@@ -20,5 +20,6 @@ API Documentation:
     -For detailed information about API requests and responses, please refer to Swagger.html located in the project directory.
 
 Security:
+
     -Uses JWT for authentication
     -Follows secure coding practices
