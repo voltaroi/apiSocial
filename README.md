@@ -14,6 +14,12 @@ Installation:
 
     -make the command: composer install
     -You can directly import the database with the "forum.sql" file
+    -You need to create an .env file with :
+        DB_HOST= ""
+        DB_NAME= ""
+        DB_USER= ""
+        DB_PASS= ""
+        JWT_SECRET= ""
 
 API Documentation:
 
